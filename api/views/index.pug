@@ -1,0 +1,10 @@
+extends layout
+
+block content
+  - var clientId = 'fc617d2c-6b2a-4a18-9e77-c2d25db45143'
+  h1= title
+  if user
+    p Hello #{user.firstName}
+  else
+    a(href='http://localhost:9011/oauth2/authorize?client_id='+clientId+'&response_type=code&redirect_uri=http%3A%2F%2Flocalhost%3A3000%2Foauth-redirect&scope=offline_access&state='+stateValue) Login
+  p Welcome to #{title}
