@@ -1,14 +1,53 @@
-var createError = require('http-errors');
-var express = require('express');
-var expressSession = require('express-session');
-var path = require('path');
-var cookieParser = require('cookie-parser');
-var logger = require('morgan');
+const createError = require('http-errors');
+const express = require('express');
+const expressSession = require('express-session');
+const path = require('path');
+const cookieParser = require('cookie-parser');
+const logger = require('morgan');
+const mysql = require('mysql');
+const dotenv = require('dotenv');
 
-var indexRouter = require('./routes/index');
-var usersRouter = require('./routes/users');
+const indexRouter = require('./routes/index');
+const usersRouter = require('./routes/users');
 
-var app = express();
+dotenv.config({ path: './.env' });
+
+const app = express();
+
+const db = mysql.createConnection({
+    host: process.env.SQL_HOST,
+    user: process.env.SQL_USER,
+    password: process.env.SQL_PASSWORD,
+    port: process.env.SQL_PORT,
+    database: process.env.SQL_DATABASE1,
+    database: process.env.SQL_DATABASE2
+        // host: '34.122.173.145',
+        // user: 'root',
+        // password: '12345678',
+        // port: '8080'
+});
+
+db.connect((err) => {
+    if (err) {
+        console.log(err);
+    } else {
+        console.log("MySQL database connected...");
+    }
+});
+
+const publicDirectory = path.join(__dirname, './public', './routes');
+app.use(express.static(publicDirectory));
+
+app.set('view-engine', 'pug');
+
+app.get("/", (req, res) => {
+    // res.send("<h1>Home Page</h1>")
+    res.render("index.pug"); // fusionauth/bin/startup.bat -> fusionauth
+});
+
+app.listen(5001, () => {
+    console.log("Server started on Port 5001");
+});
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));

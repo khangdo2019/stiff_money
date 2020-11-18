@@ -1,4 +1,21 @@
-INSERT INTO 
-  registration(`full name`, `phone number`, `Current Monthly Income`, `Income Length`, `Current Address`, `Current Monthly Rent`, `How Months Paid Rent`, `Loans Have`, `FICO`, `Password`)
-VALUES
-  ('Ken', 666, 100, 123, 12, 'House', 'dsdsd', 'abc');
+CREATE TABLE sec_user
+	(userId 				BIGINT NOT NULL PRIMARY KEY AUTO_INCREMENT
+	,username				VARCHAR(35) NOT NULL UNIQUE
+	,encryptedPassword		VARCHAR(128) NOT NULL
+	,email					VARCHAR(128) NOT NULL
+);
+
+CREATE TABLE sec_role
+	(roleId					BIGINT NOT NULL PRIMARY KEY AUTO_INCREMENT
+	,roleName				VARCHAR(30) NOT NULL UNIQUE
+	
+);
+
+CREATE TABLE user_role
+	(ID						BIGINT NOT NULL PRIMARY KEY AUTO_INCREMENT
+	,userId					BIGINT NOT NULL
+	,roleId					BIGINT NOT NULL
+	,CONSTRAINT user_role_uk UNIQUE (userId, roleId)
+    ,CONSTRAINT user_role_fk1 FOREIGN KEY (userId) REFERENCES sec_user(userId)
+    ,CONSTRAINT user_role_fk2 FOREIGN KEY (roleId) REFERENCES sec_role(roleId)
+);
